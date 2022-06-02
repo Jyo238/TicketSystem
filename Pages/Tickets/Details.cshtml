@@ -1,6 +1,6 @@
 @page
 @model TicketSystem.Pages.Tickets.DetailsModel
-
+@using TicketSystem.Enums;
 @{
     ViewData["Title"] = "Details";
 }
@@ -43,7 +43,39 @@
         </dd>
     </dl>
 </div>
+@if (Model.Ticket.AuthStatus != AuthorizationStatus.Approved)
+{
+    @if ((await AuthorizationService.AuthorizeAsync(
+    User, Model.Ticket, TicketOperations.Approve)).Succeeded)
+    {
+        <form style="display:inline;" method="post">
+            <input type="hidden" name="id" value="@Model.Ticket.TicketId" />
+            <input type="hidden" name="status" value="@AuthorizationStatus.Approved" />
+            <button type="submit" class="btn btn-xs btn-success">Approve</button>
+        </form>
+    }
+}
+
+@if (Model.Ticket.AuthStatus != AuthorizationStatus.Rejected)
+{
+    @if ((await AuthorizationService.AuthorizeAsync(
+    User, Model.Ticket, TicketOperations.Reject)).Succeeded)
+    {
+        <form style="display:inline;" method="post">
+            <input type="hidden" name="id" value="@Model.Ticket.TicketId" />
+            <input type="hidden" name="status" value="@AuthorizationStatus.Rejected" />
+            <button type="submit" class="btn btn-xs btn-danger">Reject</button>
+        </form>
+    }
+}
+
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Ticket.TicketId">Edit</a> |
+    @if ((await AuthorizationService.AuthorizeAsync(
+        User, Model.Ticket,
+        TicketOperations.Update)).Succeeded)
+    {
+        <a asp-page="./Edit" asp-route-id="@Model.Ticket.TicketId">Edit</a>
+        <text> | </text>
+    }
     <a asp-page="./Index">Back to List</a>
 </div>

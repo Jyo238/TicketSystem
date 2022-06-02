@@ -1,11 +1,11 @@
 @page
-@model TicketSystem.Pages.Tickets.IndexModel
+@model Pages.Tickets.IndexModel
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h2>Index</h2>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -14,7 +14,16 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Ticket[0].TicketId)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Ticket[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ticket[0].Summary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ticket[0].Description)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Ticket[0].Type)
@@ -23,38 +32,56 @@
                 @Html.DisplayNameFor(model => model.Ticket[0].Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ticket[0].Summary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ticket[0].Description)
+                @Html.DisplayNameFor(model => model.Ticket[0].AuthStatus)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Ticket) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Summary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.TicketId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.TicketId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.TicketId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Ticket)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TicketId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Summary)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AuthStatus)
+                </td>
+                <td>
+                    @if ((await AuthorizationService.AuthorizeAsync(
+                    User, item,
+                    TicketOperations.Update)).Succeeded)
+                    {
+                        <a asp-page="./Edit" asp-route-id="@item.TicketId">Edit</a>
+                        <text> | </text>
+                    }
+
+                    <a asp-page="./Details" asp-route-id="@item.TicketId">Details</a>
+
+                    @if ((await AuthorizationService.AuthorizeAsync(
+                    User, item,
+                    TicketOperations.Delete)).Succeeded)
+                    {
+                        <text> | </text>
+                        <a asp-page="./Delete" asp-route-id="@item.TicketId">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

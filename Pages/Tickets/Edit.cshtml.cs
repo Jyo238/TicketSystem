@@ -1,74 +1,101 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using TicketSystem.Authorization;
 using TicketSystem.Data;
+using TicketSystem.Enums;
 using TicketSystem.Models;
 
 namespace TicketSystem.Pages.Tickets
 {
-    public class EditModel : PageModel
+    public class EditModel : DI_BasePageModel
     {
         private readonly TicketSystem.Data.ApplicationDbContext _context;
 
-        public EditModel(TicketSystem.Data.ApplicationDbContext context)
+        public EditModel(
+        ApplicationDbContext context,
+        IAuthorizationService authorizationService,
+        UserManager<IdentityUser> userManager)
+        : base(context, authorizationService, userManager)
         {
-            _context = context;
         }
 
         [BindProperty]
         public Ticket Ticket { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Ticket = await _context.Ticket.FirstOrDefaultAsync(m => m.TicketId == id);
+            Ticket = await Context.Ticket.FirstOrDefaultAsync(
+                                                 m => m.TicketId == id);
 
             if (Ticket == null)
             {
                 return NotFound();
             }
+
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(
+                                                      User, Ticket,
+                                                      TicketOperations.Update);
+            if (!isAuthorized.Succeeded)
+            {
+                return Forbid();
+            }
+
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int id)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Ticket).State = EntityState.Modified;
+            // Fetch Ticket from DB to get OwnerID.
+            var Ticket = await Context
+                .Ticket.AsNoTracking()
+                .FirstOrDefaultAsync(m => m.TicketId == id);
 
-            try
+            if (Ticket == null)
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
+
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(
+                                                     User, Ticket,
+                                                     TicketOperations.Update);
+            if (!isAuthorized.Succeeded)
             {
-                if (!TicketExists(Ticket.TicketId))
+                return Forbid();
+            }
+
+            Ticket.OwnerID = Ticket.OwnerID;
+
+            Context.Attach(Ticket).State = EntityState.Modified;
+
+            if (Ticket.AuthStatus == AuthorizationStatus.Approved)
+            {
+                // If the Ticket is updated after approval, 
+                // and the user cannot approve,
+                // set the status back to submitted so the update can be
+                // checked and approved.
+                var canApprove = await AuthorizationService.AuthorizeAsync(User,
+                                        Ticket,
+                                        TicketOperations.Approve);
+
+                if (!canApprove.Succeeded)
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
+                    Ticket.AuthStatus = AuthorizationStatus.Submitted;
                 }
             }
+
+            await Context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }
-
         private bool TicketExists(int id)
         {
             return _context.Ticket.Any(e => e.TicketId == id);

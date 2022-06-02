@@ -2,28 +2,48 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using TicketSystem.Authorization;
 using TicketSystem.Data;
+using TicketSystem.Enums;
 using TicketSystem.Models;
 
 namespace TicketSystem.Pages.Tickets
 {
-    public class IndexModel : PageModel
+    public class IndexModel : DI_BasePageModel
     {
         private readonly TicketSystem.Data.ApplicationDbContext _context;
-
-        public IndexModel(TicketSystem.Data.ApplicationDbContext context)
+        public IndexModel(
+                ApplicationDbContext context,
+                IAuthorizationService authorizationService,
+                UserManager<IdentityUser> userManager)
+                : base(context, authorizationService, userManager)
         {
-            _context = context;
         }
 
         public IList<Ticket> Ticket { get;set; }
 
         public async Task OnGetAsync()
         {
-            Ticket = await _context.Ticket.ToListAsync();
+            var Tickets = from c in Context.Ticket
+                           select c;
+
+            var isAuthorized = User.IsInRole(Constants.TicketManagersRole) ||
+                               User.IsInRole(Constants.TicketAdministratorsRole);
+
+            var currentUserId = UserManager.GetUserId(User);
+
+            // Only approved Tickets are shown UNLESS you're authorized to see them
+            // or you are the owner.
+            if (!isAuthorized)
+            {
+                Tickets = Tickets.Where(c => c.AuthStatus == AuthorizationStatus.Approved
+                                            || c.OwnerID == currentUserId);
+            }
+
+            Ticket = await Tickets.ToListAsync();
         }
     }
 }

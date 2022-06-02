@@ -1,57 +1,72 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using TicketSystem.Authorization;
 using TicketSystem.Data;
 using TicketSystem.Models;
 
+
 namespace TicketSystem.Pages.Tickets
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel : DI_BasePageModel
     {
         private readonly TicketSystem.Data.ApplicationDbContext _context;
 
-        public DeleteModel(TicketSystem.Data.ApplicationDbContext context)
+        public DeleteModel(
+               ApplicationDbContext context,
+               IAuthorizationService authorizationService,
+               UserManager<IdentityUser> userManager)
+               : base(context, authorizationService, userManager)
         {
-            _context = context;
         }
 
         [BindProperty]
         public Ticket Ticket { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Ticket = await _context.Ticket.FirstOrDefaultAsync(m => m.TicketId == id);
+            Ticket = await Context.Ticket.FirstOrDefaultAsync(
+                                                 m => m.TicketId == id);
 
             if (Ticket == null)
             {
                 return NotFound();
             }
+
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(
+                                                     User, Ticket,
+                                                     TicketOperations.Delete);
+            if (!isAuthorized.Succeeded)
+            {
+                return Forbid();
+            }
+
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (id == null)
+            var Ticket = await Context
+                .Ticket.AsNoTracking()
+                .FirstOrDefaultAsync(m => m.TicketId == id);
+
+            if (Ticket == null)
             {
                 return NotFound();
             }
 
-            Ticket = await _context.Ticket.FindAsync(id);
-
-            if (Ticket != null)
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(
+                                                     User, Ticket,
+                                                     TicketOperations.Delete);
+            if (!isAuthorized.Succeeded)
             {
-                _context.Ticket.Remove(Ticket);
-                await _context.SaveChangesAsync();
+                return Forbid();
             }
+
+            Context.Ticket.Remove(Ticket);
+            await Context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }
