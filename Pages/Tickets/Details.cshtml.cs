@@ -37,14 +37,14 @@ namespace TicketSystem.Pages.Tickets
                 return NotFound();
             }
 
-            var isAuthorized = User.IsInRole(Constants.TicketManagersRole) ||
+            var isAuthorized = User.IsInRole(Constants.TicketRDsRole) ||
                                User.IsInRole(Constants.TicketAdministratorsRole);
 
             var currentUserId = UserManager.GetUserId(User);
 
             if (!isAuthorized
                 && currentUserId != Ticket.OwnerID
-                && Ticket.AuthStatus != AuthorizationStatus.Approved)
+                && Ticket.Status != AuthorizationStatus.Resolved)
             {
                 return Forbid();
             }
@@ -62,8 +62,8 @@ namespace TicketSystem.Pages.Tickets
                 return NotFound();
             }
 
-            var TicketOperation = (status == AuthorizationStatus.Approved)
-                                                       ? TicketOperations.Approve
+            var TicketOperation = (status == AuthorizationStatus.Resolved)
+                                                       ? TicketOperations.Resolve
                                                        : TicketOperations.Reject;
 
             var isAuthorized = await AuthorizationService.AuthorizeAsync(User, Ticket,
@@ -72,7 +72,7 @@ namespace TicketSystem.Pages.Tickets
             {
                 return Forbid();
             }
-            Ticket.AuthStatus = status;
+            Ticket.Status = status;
             Context.Ticket.Update(Ticket);
             await Context.SaveChangesAsync();
 

@@ -24,12 +24,6 @@
             @Html.DisplayFor(model => model.Ticket.Type)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticket.Status)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Ticket.Status)
-        </dd>
-        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ticket.Summary)
         </dt>
         <dd class="col-sm-10">
@@ -43,27 +37,27 @@
         </dd>
     </dl>
 </div>
-@if (Model.Ticket.AuthStatus != AuthorizationStatus.Approved)
+@if (Model.Ticket.Status != AuthorizationStatus.Resolved)
 {
     @if ((await AuthorizationService.AuthorizeAsync(
-    User, Model.Ticket, TicketOperations.Approve)).Succeeded)
+    User, Model.Ticket, TicketOperations.Resolve)).Succeeded)
     {
         <form style="display:inline;" method="post">
             <input type="hidden" name="id" value="@Model.Ticket.TicketId" />
-            <input type="hidden" name="status" value="@AuthorizationStatus.Approved" />
-            <button type="submit" class="btn btn-xs btn-success">Approve</button>
+            <input type="hidden" name="status" value="@AuthorizationStatus.Resolved" />
+            <button type="submit" class="btn btn-xs btn-success">Resolve</button>
         </form>
     }
 }
 
-@if (Model.Ticket.AuthStatus != AuthorizationStatus.Rejected)
+@if (Model.Ticket.Status != AuthorizationStatus.NotYet)
 {
     @if ((await AuthorizationService.AuthorizeAsync(
     User, Model.Ticket, TicketOperations.Reject)).Succeeded)
     {
         <form style="display:inline;" method="post">
             <input type="hidden" name="id" value="@Model.Ticket.TicketId" />
-            <input type="hidden" name="status" value="@AuthorizationStatus.Rejected" />
+            <input type="hidden" name="status" value="@AuthorizationStatus.NotYet" />
             <button type="submit" class="btn btn-xs btn-danger">Reject</button>
         </form>
     }

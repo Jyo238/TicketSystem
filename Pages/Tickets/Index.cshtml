@@ -31,9 +31,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Ticket[0].Status)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ticket[0].AuthStatus)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -55,12 +52,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Type)
-                </td>
+                </td>         
                 <td>
                     @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AuthStatus)
                 </td>
                 <td>
                     @if ((await AuthorizationService.AuthorizeAsync(

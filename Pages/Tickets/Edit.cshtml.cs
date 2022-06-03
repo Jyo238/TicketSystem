@@ -76,19 +76,19 @@ namespace TicketSystem.Pages.Tickets
 
             Context.Attach(Ticket).State = EntityState.Modified;
 
-            if (Ticket.AuthStatus == AuthorizationStatus.Approved)
+            if (Ticket.Status == AuthorizationStatus.Resolved)
             {
                 // If the Ticket is updated after approval, 
-                // and the user cannot approve,
+                // and the user cannot Resolve,
                 // set the status back to submitted so the update can be
-                // checked and approved.
-                var canApprove = await AuthorizationService.AuthorizeAsync(User,
+                // checked and Resolved.
+                var canResolve = await AuthorizationService.AuthorizeAsync(User,
                                         Ticket,
-                                        TicketOperations.Approve);
+                                        TicketOperations.Resolve);
 
-                if (!canApprove.Succeeded)
+                if (!canResolve.Succeeded)
                 {
-                    Ticket.AuthStatus = AuthorizationStatus.Submitted;
+                    Ticket.Status = AuthorizationStatus.Submitted;
                 }
             }
 

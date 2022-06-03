@@ -30,18 +30,18 @@ namespace TicketSystem.Pages.Tickets
             var Tickets = from c in Context.Ticket
                            select c;
 
-            var isAuthorized = User.IsInRole(Constants.TicketManagersRole) ||
+            var isAuthorized = User.IsInRole(Constants.TicketRDsRole) ||
                                User.IsInRole(Constants.TicketAdministratorsRole);
 
             var currentUserId = UserManager.GetUserId(User);
 
-            // Only approved Tickets are shown UNLESS you're authorized to see them
+            // Only Resolved Tickets are shown UNLESS you're authorized to see them
             // or you are the owner.
-            if (!isAuthorized)
-            {
-                Tickets = Tickets.Where(c => c.AuthStatus == AuthorizationStatus.Approved
-                                            || c.OwnerID == currentUserId);
-            }
+            //if (!isAuthorized)
+            //{
+            //    Tickets = Tickets.Where(c => c.Status == AuthorizationStatus.Resolved
+            //                                || c.OwnerID == currentUserId);
+            //}
 
             Ticket = await Tickets.ToListAsync();
         }
