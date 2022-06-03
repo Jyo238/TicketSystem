@@ -20,14 +20,14 @@ namespace TicketManager.Authorization
             }
 
             // If not asking for approval/reject, return.
-            if (requirement.Name != Constants.ApproveOperationName &&
+            if (requirement.Name != Constants.ResolveOperationName &&
                 requirement.Name != Constants.RejectOperationName)
             {
                 return Task.CompletedTask;
             }
 
-            // Managers can approve or reject.
-            if (context.User.IsInRole(Constants.TicketManagersRole))
+            // RD can Resolve or reject.
+            if (context.User.IsInRole(Constants.TicketRDsRole))
             {
                 context.Succeed(requirement);
             }

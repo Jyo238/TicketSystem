@@ -38,10 +38,12 @@ namespace TicketManager.Authorization
                 return Task.CompletedTask;
             }
 
-            if (resource.OwnerID == _userManager.GetUserId(context.User))
-            {
-                context.Succeed(requirement);
-            }
+            //這邊是確定是否為只能看自己的單
+            //if (resource.OwnerID == _userManager.GetUserId(context.User))
+            //{
+            //    context.Succeed(requirement);
+            //}
+            context.Succeed(requirement);
 
             return Task.CompletedTask;
         }
