@@ -16,8 +16,8 @@ namespace TicketSystem.Authorization
           new OperationAuthorizationRequirement { Name = Constants.UpdateOperationName };
         public static OperationAuthorizationRequirement Delete =
           new OperationAuthorizationRequirement { Name = Constants.DeleteOperationName };
-        public static OperationAuthorizationRequirement Approve =
-          new OperationAuthorizationRequirement { Name = Constants.ApproveOperationName };
+        public static OperationAuthorizationRequirement Resolve =
+          new OperationAuthorizationRequirement { Name = Constants.ResolveOperationName };
         public static OperationAuthorizationRequirement Reject =
           new OperationAuthorizationRequirement { Name = Constants.RejectOperationName };
     }

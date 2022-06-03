@@ -21,14 +21,14 @@ namespace TicketSystem.Data
             // dotnet user-secrets set SeedUserPW <pw>
             // The admin user can do anything
 
-            var adminID = await EnsureUser(serviceProvider, testUserPw, "admin@contoso.com");
-            await EnsureRole(serviceProvider, adminID, Constants.TicketAdministratorsRole);
+            var admin = await EnsureUser(serviceProvider, testUserPw, "admin@remotes.com");
+            await EnsureRole(serviceProvider, admin, Constants.TicketAdministratorsRole);
 
             // allowed user can create and edit contacts that they create
-            var managerID = await EnsureUser(serviceProvider, testUserPw, "manager@contoso.com");
-            await EnsureRole(serviceProvider, managerID, Constants.TicketManagersRole);
+            var rD = await EnsureUser(serviceProvider, testUserPw, "RD@remotes.com");
+            await EnsureRole(serviceProvider, rD, Constants.TicketRDsRole);
 
-            SeedDB(context, adminID);
+            SeedDB(context, admin);
         }
 
         private static async Task<string> EnsureUser(IServiceProvider serviceProvider,
@@ -103,7 +103,7 @@ namespace TicketSystem.Data
                     Title = "Bug one",
                     Summary = "1234",
                     Description = "好多bug",
-                    AuthStatus = AuthorizationStatus.Approved,
+                    Status = AuthorizationStatus.Resolved,
                     OwnerID = adminID
                 },
                new Ticket
