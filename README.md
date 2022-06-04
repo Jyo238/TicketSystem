@@ -6,8 +6,6 @@
 
 ticket tracking system -  allows QA to report a bug and RD can mark a bug as resolved.
 
----
-
 ## 初始化專案
 
 ### 各身分之帳號密碼
@@ -24,17 +22,12 @@ dotnet user-secrets set SeedUserPW <PW>
 dotnet run
 ```
 
----
-
-
 ## 框架與主要程式庫
 
 -.net Core MVC
 
 
 ## 結構
-
-------
 
 - /
   - Authorization - 驗證身分相關
@@ -46,9 +39,7 @@ dotnet run
   - startUp.cs 設定應用程式要使用的服務和處理請求
 
 
-## 專案 位置
-
-----
+## 專案位置
 
 https://github.com/Jyo238/TicketSystem
 
