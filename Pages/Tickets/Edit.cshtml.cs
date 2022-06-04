@@ -88,7 +88,7 @@ namespace TicketSystem.Pages.Tickets
 
                 if (!canResolve.Succeeded)
                 {
-                    Ticket.Status = AuthorizationStatus.Submitted;
+                    Ticket.Status = AuthorizationStatus.Stateless;
                 }
             }
 

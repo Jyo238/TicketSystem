@@ -15,6 +15,7 @@ namespace TicketSystem.Authorization
         public static readonly string RejectOperationName = "Not yet";
 
         public static readonly string TicketAdministratorsRole ="TicketAdministrators";
+        public static readonly string TicketQAsRole = "TicketQAs";
         public static readonly string TicketRDsRole = "TicketRDs";
     }
 }

@@ -24,9 +24,13 @@ namespace TicketSystem.Data
             var admin = await EnsureUser(serviceProvider, testUserPw, "admin@remotes.com");
             await EnsureRole(serviceProvider, admin, Constants.TicketAdministratorsRole);
 
-            // allowed user can create and edit contacts that they create
-            var rD = await EnsureUser(serviceProvider, testUserPw, "RD@remotes.com");
+            // rd
+            var rD = await EnsureUser(serviceProvider, testUserPw, "newRD@remotes.com");
             await EnsureRole(serviceProvider, rD, Constants.TicketRDsRole);
+
+            // qa
+            var qA = await EnsureUser(serviceProvider, testUserPw, "newQA@remotes.com");
+            await EnsureRole(serviceProvider, qA, Constants.TicketQAsRole);
 
             SeedDB(context, admin);
         }

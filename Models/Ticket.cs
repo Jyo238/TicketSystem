@@ -9,7 +9,6 @@ namespace TicketSystem.Models
         public string Title { get; set; }
         // user ID from AspNetUser table.
         public string OwnerID { get; set; }
-        public TicketType Type { get; set; }
         [Required]
         public string Summary { get; set; }
         [Required]

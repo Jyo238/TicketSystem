@@ -7,11 +7,11 @@ using TicketSystem.Models;
 
 namespace TicketManager.Authorization
 {
-    public class TicketIsOwnerAuthorizationHandler
+    public class TicketQAAuthorizationHandler
                 : AuthorizationHandler<OperationAuthorizationRequirement, Ticket>
     {
 
-        public TicketIsOwnerAuthorizationHandler()
+        public TicketQAAuthorizationHandler()
         {
         }
 
@@ -25,22 +25,19 @@ namespace TicketManager.Authorization
                 return Task.CompletedTask;
             }
 
-            // If not asking for CRUD permission, return.
-
-            //if (requirement.Name != Constants.CreateOperationName &&
-            //    requirement.Name != Constants.ReadOperationName &&
-            //    requirement.Name != Constants.UpdateOperationName &&
-            //    requirement.Name != Constants.DeleteOperationName)
-            //{
-            //    return Task.CompletedTask;
-            //}
-
-            //這邊是確定是否為只能看自己的單
-            //if (resource.OwnerID == _userManager.GetUserId(context.User))
-            //{
-            //    context.Succeed(requirement);
-            //}
-            //context.Succeed(requirement);
+            // QA can create/read/update/delete bugs.
+            if (context.User.IsInRole(Constants.TicketQAsRole))
+            {
+                
+                if (requirement.Name != Constants.CreateOperationName &&
+                    requirement.Name != Constants.ReadOperationName &&
+                    requirement.Name != Constants.UpdateOperationName &&
+                    requirement.Name != Constants.DeleteOperationName)
+                {
+                    return Task.CompletedTask;
+                }
+                context.Succeed(requirement);
+            }
 
             return Task.CompletedTask;
         }

@@ -7,7 +7,7 @@ namespace TicketSystem.Enums
 {
     public enum AuthorizationStatus
     {
-        Submitted,
+        Stateless,
         Resolved,
         NotYet
     }

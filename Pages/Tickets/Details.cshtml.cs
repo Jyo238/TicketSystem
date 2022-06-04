@@ -37,8 +37,9 @@ namespace TicketSystem.Pages.Tickets
                 return NotFound();
             }
 
-            var isAuthorized = User.IsInRole(Constants.TicketRDsRole) ||
-                               User.IsInRole(Constants.TicketAdministratorsRole);
+            var isAuthorized = User.IsInRole(Constants.TicketRDsRole) || 
+                User.IsInRole(Constants.TicketQAsRole) || 
+                User.IsInRole(Constants.TicketAdministratorsRole);
 
             var currentUserId = UserManager.GetUserId(User);
 

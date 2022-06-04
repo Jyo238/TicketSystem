@@ -6,7 +6,7 @@ using TicketSystem.Models;
 
 namespace TicketManager.Authorization
 {
-    public class TicketManagerAuthorizationHandler :
+    public class TicketRDAuthorizationHandler :
         AuthorizationHandler<OperationAuthorizationRequirement, Ticket>
     {
         protected override Task
@@ -20,15 +20,22 @@ namespace TicketManager.Authorization
             }
 
             // If not asking for approval/reject, return.
-            if (requirement.Name != Constants.ResolveOperationName &&
-                requirement.Name != Constants.RejectOperationName)
-            {
-                return Task.CompletedTask;
-            }
+            //if (requirement.Name != Constants.ResolveOperationName &&
+            //    requirement.Name != Constants.RejectOperationName)
+            //{
+            //    return Task.CompletedTask;
+            //}
 
             // RD can Resolve or reject.
             if (context.User.IsInRole(Constants.TicketRDsRole))
             {
+                //如果不是 Reslove / Reject相關的 直接return.
+                if (requirement.Name != Constants.ResolveOperationName &&
+                requirement.Name != Constants.RejectOperationName)
+                {
+                    return Task.CompletedTask;
+                }
+
                 context.Succeed(requirement);
             }
 

@@ -10,9 +10,9 @@ namespace TicketManager.Authorization
                     : AuthorizationHandler<OperationAuthorizationRequirement, Ticket>
     {
         protected override Task HandleRequirementAsync(
-                                              AuthorizationHandlerContext context,
+                                    AuthorizationHandlerContext context,
                                     OperationAuthorizationRequirement requirement,
-                                     Ticket resource)
+                                    Ticket resource)
         {
             if (context.User == null)
             {

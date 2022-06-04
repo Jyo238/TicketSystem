@@ -47,10 +47,9 @@ namespace TicketSystem
 
             // Authorization handlers.
             services.AddScoped<IAuthorizationHandler,TicketIsOwnerAuthorizationHandler>();
-
             services.AddSingleton<IAuthorizationHandler,TicketAdministratorsAuthorizationHandler>();
-
-            services.AddSingleton<IAuthorizationHandler,TicketManagerAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler,TicketQAAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler,TicketRDAuthorizationHandler>();
 
             services.AddControllers(config =>
             {

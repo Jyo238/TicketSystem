@@ -5,11 +5,14 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
-
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
+<h2>Tickets</h2>
+@if ((await AuthorizationService.AuthorizeAsync(
+   User, Model.Ticket[0], TicketOperations.Create)).Succeeded)
+{
+    <p>
+        <a asp-page="Create">Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -24,9 +27,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Ticket[0].Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ticket[0].Type)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Ticket[0].Status)
@@ -51,15 +51,12 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Type)
-                </td>         
-                <td>
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
                 <td>
                     @if ((await AuthorizationService.AuthorizeAsync(
-                    User, item,
-                    TicketOperations.Update)).Succeeded)
+                   User, item,
+                   TicketOperations.Update)).Succeeded)
                     {
                         <a asp-page="./Edit" asp-route-id="@item.TicketId">Edit</a>
                         <text> | </text>
@@ -68,8 +65,8 @@
                     <a asp-page="./Details" asp-route-id="@item.TicketId">Details</a>
 
                     @if ((await AuthorizationService.AuthorizeAsync(
-                    User, item,
-                    TicketOperations.Delete)).Succeeded)
+                   User, item,
+                   TicketOperations.Delete)).Succeeded)
                     {
                         <text> | </text>
                         <a asp-page="./Delete" asp-route-id="@item.TicketId">Delete</a>
