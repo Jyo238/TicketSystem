@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>aspnet-TicketSystem-B51BB40A-866C-4D6B-9DAC-08B6F5619F5E</UserSecretsId>
   </PropertyGroup>
 
