@@ -55,40 +55,44 @@ namespace TicketSystem.Pages.Tickets
             }
 
             // Fetch Ticket from DB to get OwnerID.
-            var Ticket = await Context
+            var ticket = await Context
                 .Ticket.AsNoTracking()
                 .FirstOrDefaultAsync(m => m.TicketId == id);
 
-            if (Ticket == null)
+            if (ticket == null)
             {
                 return NotFound();
             }
 
             var isAuthorized = await AuthorizationService.AuthorizeAsync(
-                                                     User, Ticket,
+                                                     User, ticket,
                                                      TicketOperations.Update);
             if (!isAuthorized.Succeeded)
             {
                 return Forbid();
             }
 
-            Ticket.OwnerID = Ticket.OwnerID;
+            ticket.OwnerID = Ticket.OwnerID;
 
-            Context.Attach(Ticket).State = EntityState.Modified;
+            Context.Attach(ticket).State = EntityState.Modified;
 
-            if (Ticket.Status == AuthorizationStatus.Resolved)
+            ticket.Title = Ticket.Title;
+            ticket.Description = Ticket.Description;
+            ticket.Summary = Ticket.Summary;
+
+            if (ticket.Status == AuthorizationStatus.Resolved)
             {
                 // If the Ticket is updated after approval, 
                 // and the user cannot Resolve,
                 // set the status back to submitted so the update can be
                 // checked and Resolved.
                 var canResolve = await AuthorizationService.AuthorizeAsync(User,
-                                        Ticket,
+                                        ticket,
                                         TicketOperations.Resolve);
 
                 if (!canResolve.Succeeded)
                 {
-                    Ticket.Status = AuthorizationStatus.Stateless;
+                    ticket.Status = AuthorizationStatus.Stateless;
                 }
             }
 
