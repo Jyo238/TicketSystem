@@ -4,7 +4,50 @@
     ViewData["Title"] = "Home page";
 }
 
+
+<style>
+    table, th, td {
+        padding: 5px;
+        border: 1px solid black;
+    }
+</style>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">瑞莫科技 - Ticket Tracking System</h1>
 </div>
+<div class="text-left">
+    <div>
+        左上角進入 Page.<br />
+        請確認是否有使用 <span style="color:orangered">dotnet user-secrets set SeedUserPW {PW}</span> 設定密碼.<br />
+        請使用強式密碼：使用八個或多個字元，以及至少一個大寫字元、數位和符號。 例如，
+        <span style="color:orangered">Passw0rd!</span> 符合強式密碼需求。<br />
+    </div>
+    <br>
+    <div>
+        測試的簡單方式是啟動三個不同的瀏覽器， (或無痕模式) 。 <br />
+        以不同的使用者登入每個瀏覽器。確認下列功能：<br />
+        1.Only QA can create a bug, edit a bug and delete a bug.<br />
+        2.Only RD can resolve a bug.(Details 檢視會顯示 [Resolve ] 和 [ NotYet ] 按鈕。)<br />
+        3.Summary field and Description filed are required of a bug when QA is creating a bug.<br />
+        ※Administrator can do all operations.。<br />
+        <table>
+        <tr>
+            <th>User</th>
+            <th>選項</th>
+        </tr>
+        <tr>
+            <td>newQA@remotes.com</td>
+            <td>create/read/edit/delete a bug.</td>
+        </tr>
+        <tr>
+            <td>newRD@remotes.com</td>
+            <td>can resolve a bug.</td>
+        </tr>
+        <tr>
+            <td>admin@remotes.com</td>
+            <td>all operations.</td>
+        </tr>
+    </table>
+    </div>
+</div>
+
