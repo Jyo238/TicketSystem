@@ -55,9 +55,13 @@ https://github.com/Jyo238/TicketSystem.git
   
 ---
   Task 1 - Please write down all the use cases either in text or diagram you can think for Phase I and Phase II requirement separately.
+  
   https://button-weeder-9f4.notion.site/TicketSystem-faef89b133bf49aba4f4a83e22d73a98
   
   Task 3 - Think of yourself as an architect. How will you design this system, please write down the design document at least to include data model, class diagram and  UI mock up.
+  
+  https://www.figma.com/proto/sUQlNh7K7ElYETW2oChEvk/Untitled?node-id=2%3A2&starting-point-node-id=2%3A2
 
 Task 4 - If we are going to open the system for 3rd party to use, can you please design the Web API(Json format) and api document?
+  
 https://button-weeder-9f4.notion.site/API-Document-3205599c4d5942988d526988dd4d0ea9
