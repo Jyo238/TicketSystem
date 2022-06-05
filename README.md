@@ -12,7 +12,7 @@ Ticket Tracking System -  allows QA to report a bug and RD can mark a bug as res
 https://dotnet.microsoft.com/en-us/download/dotnet/6.0 .net SDK 6.0
 
 https://docs.microsoft.com/zh-tw/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver16
-SQL EXPRESS 2019 (可選擇基本安裝，或者是[自訂媒體]=>[LocalDB套件]。)
+SQL EXPRESS 2019
 
 ### 各身分之帳號密碼
 選擇強式密碼：使用八個或多個字元，以及至少一個大寫字元、數位和符號。 例如， Passw0rd! 符合強式密碼需求。
