@@ -58,6 +58,10 @@ https://github.com/Jyo238/TicketSystem.git
   
   https://button-weeder-9f4.notion.site/TicketSystem-faef89b133bf49aba4f4a83e22d73a98
   
+  Task 2 - Please implement the A. Phase I Requirement by .NET Core MVC/Java Spring MVC/PHP Laravel 8/ Python Django. For front-end, you can use any framework you like, but we prefer Vue XDD.
+  
+  https://github.com/Jyo238/TicketSystem/
+  
   Task 3 - Think of yourself as an architect. How will you design this system, please write down the design document at least to include data model, class diagram and  UI mock up.
   
   https://www.figma.com/proto/sUQlNh7K7ElYETW2oChEvk/Untitled?node-id=2%3A2&starting-point-node-id=2%3A2
